@@ -8,15 +8,27 @@ export class PasswordItem{
     startsAt: Date;
     history:PasswordField[];
     constructor(){
-
+        this.target="";
+        this.targetURL="";
+        this.username="";
+        this.email="";
+        this.note="";
+        this.currentPassword ="";
+        this.startsAt= new Date();
+        this.history=[];
     }   
 }
 
 
-export interface PasswordField{
-    password:string,
-    startsAt: Date,
-    endsAt: Date
+export class PasswordField{
+    password:string;
+    startsAt: Date;
+    endsAt: Date;
+    constructor(){
+        this.password="sushi";
+        this.startsAt = new Date();
+        this.endsAt= new Date();
+    }
 }
 
 

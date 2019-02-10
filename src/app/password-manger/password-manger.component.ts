@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PasswordGroup } from '../models/PasswordModels';
+import { PasswordGroup, PasswordItem } from '../models/PasswordModels';
 
 @Component({
   selector: 'app-password-manger',
@@ -9,10 +9,16 @@ import { PasswordGroup } from '../models/PasswordModels';
 export class PasswordMangerComponent implements OnInit {
   allPasswordData: PasswordGroup[] = [{
     groupName: 'web',
-    content: []
+    content: [
+      new PasswordItem(),
+      new PasswordItem(),
+    ]
   }, {
     groupName: 'RDP',
-    content: []
+    content: [
+      new PasswordItem(),
+      new PasswordItem(),
+    ]
   }];
   constructor() { }
 

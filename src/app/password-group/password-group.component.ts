@@ -7,11 +7,12 @@ import { PasswordGroup, PasswordItem } from '../models/PasswordModels';
   styleUrls: ['./password-group.component.css']
 })
 export class PasswordGroupComponent implements OnInit {
-  @Input()  data:PasswordGroup;
+  @Input()  data:PasswordGroup[];
 
   constructor() { }
 
   ngOnInit() {
+    console.log(this.data);
   }
 
 }

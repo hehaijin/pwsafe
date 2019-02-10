@@ -5,11 +5,11 @@ import { ValueConverter } from '@angular/compiler/src/render3/view/template';
   selector: 'app-password-field',
   template: `
   <mat-form-field>
-    <input [type]='type' matInput placeholder="Password" value="Sushi">
+    <input [type]='type' matInput placeholder="Password" [value]="Value">
     <button mat-button matSuffix mat-icon-button (mousedown)="cansee()" (mouseup)='cannotsee()'>
       <mat-icon>visibility</mat-icon>
-    </button>
-  </mat-form-field>
+     </button>
+    </mat-form-field>
   <button *ngIf='copybutton'  style='margin-left:20px' mat-raised-button color='primary'>
   <mat-icon>file_copy</mat-icon>Copy
 </button>

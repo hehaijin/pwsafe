@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { PasswordItem, PasswordField } from '../models/PasswordModels';
 
 @Component({
   selector: 'app-password-item',
@@ -6,8 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./password-item.component.css']
 })
 export class PasswordItemComponent implements OnInit {
-
-  passworditem: any = {
+  @Input() passworditem: PasswordItem;
+  passworditemExample: any = {
     target: 'Facebook',
     URL: 'www.facebook.com',
     username: 'sushi',
@@ -25,6 +26,7 @@ export class PasswordItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.passworditem);
   }
 
   toggleHistory() {
@@ -32,18 +34,14 @@ export class PasswordItemComponent implements OnInit {
   }
 
   save() {
-    this.passworditem.history.push({
-      username: 'sushi',
-      password: 'sushi2',
-      start: '01/10/2011',
-    })
+    this.passworditem.history.push(new PasswordField());
   }
 
-  clearHistory(){
-    this.passworditem.history.length=0;
+  clearHistory() {
+    this.passworditem.history.length = 0;
   }
 
-  deleteHistory(){
-    this.passworditem.history.length= this.passworditem.history.length-1;
+  deleteHistory() {
+    this.passworditem.history.length = this.passworditem.history.length - 1;
   }
 }
