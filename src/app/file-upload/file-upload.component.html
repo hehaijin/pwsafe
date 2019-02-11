@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>upload file</h2>
+<mat-dialog-content>
+  <div style='width:600px'>
+    <input type="file" #file (change)="onFilesAdded()" multiple />
+
+    <button mat-raised-button (click)="upload()" mat-dialog-close>Upload</button>
+  </div>
+</mat-dialog-content>

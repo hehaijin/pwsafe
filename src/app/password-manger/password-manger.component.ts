@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PasswordGroup, PasswordItem } from '../models/PasswordModels';
+import { MatDialog } from '@angular/material';
+import { FileUploadComponent } from '../file-upload/file-upload.component';
 
 @Component({
   selector: 'app-password-manger',
@@ -20,9 +22,39 @@ export class PasswordMangerComponent implements OnInit {
       new PasswordItem(),
     ]
   }];
-  constructor() { }
+  constructor(private matDialog: MatDialog) { }
 
   ngOnInit() {
+  }
+
+  exportPasswords() {
+    console.log('exporting everything');
+  }
+
+  import() {
+    const diaglogref = this.matDialog.open(FileUploadComponent);
+    diaglogref.afterClosed().subscribe(result => {
+      if (!result) return;
+      console.log('The dialog was closed');
+      console.log(result);
+      this.allPasswordData= this.parseResult(result);
+    });
+  }
+
+  parseResult(result){
+    return  [{
+      groupName: 'work',
+      content: [
+        new PasswordItem(),
+        new PasswordItem(),
+      ]
+    }, {
+      groupName: 'RDP',
+      content: [
+        new PasswordItem(),
+        new PasswordItem(),
+      ]
+    }];
   }
 
 }

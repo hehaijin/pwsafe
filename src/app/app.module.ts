@@ -32,6 +32,7 @@ import { PasswordFieldComponent } from './password-field/password-field.componen
 import { AddNewComponent } from './add-new/add-new.component';
 import { DeletePasswordDialogComponent } from './delete-password-dialog/delete-password-dialog.component';
 import { AddNewPasswordComponent } from './add-new-password/add-new-password.component';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { AddNewPasswordComponent } from './add-new-password/add-new-password.com
     AddNewComponent,
     DeletePasswordDialogComponent,
     AddNewPasswordComponent,
+    FileUploadComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,6 +74,6 @@ import { AddNewPasswordComponent } from './add-new-password/add-new-password.com
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents:[AddNewPasswordComponent]
+  entryComponents:[AddNewPasswordComponent,FileUploadComponent]
 })
 export class AppModule { }
