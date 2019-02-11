@@ -31,6 +31,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { PasswordFieldComponent } from './password-field/password-field.component';
 import { AddNewComponent } from './add-new/add-new.component';
 import { DeletePasswordDialogComponent } from './delete-password-dialog/delete-password-dialog.component';
+import { AddNewPasswordComponent } from './add-new-password/add-new-password.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { DeletePasswordDialogComponent } from './delete-password-dialog/delete-p
     PasswordFieldComponent,
     AddNewComponent,
     DeletePasswordDialogComponent,
+    AddNewPasswordComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +71,7 @@ import { DeletePasswordDialogComponent } from './delete-password-dialog/delete-p
     ReactiveFormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[AddNewPasswordComponent]
 })
 export class AppModule { }

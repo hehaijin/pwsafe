@@ -4,9 +4,9 @@ export class PasswordItem {
         public target: string='facebook', // like 'facebook'
         public targetURL: string="", // like 'www.facebook.com'
         public username: string='test', // this does not change
+        public currentPassword: string='test',
         public email: string="",
         public note: string="",
-        public currentPassword: string='test',
         public startsAt: Date= new Date(),
         public history: PasswordField[]= [],
     ) {
