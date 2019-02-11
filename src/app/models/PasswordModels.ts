@@ -1,38 +1,29 @@
-export class PasswordItem{
-    target: string; // like 'facebook'
-    targetURL: string; // like 'www.facebook.com'
-    username:string; // this does not change
-    email: string;
-    note: string;
-    currentPassword: string;
-    startsAt: Date;
-    history:PasswordField[];
-    constructor(){
-        this.target="";
-        this.targetURL="";
-        this.username="";
-        this.email="";
-        this.note="";
-        this.currentPassword ="";
-        this.startsAt= new Date();
-        this.history=[];
-    }   
-}
+export class PasswordItem {
 
-
-export class PasswordField{
-    password:string;
-    startsAt: Date;
-    endsAt: Date;
-    constructor(){
-        this.password="sushi";
-        this.startsAt = new Date();
-        this.endsAt= new Date();
+    constructor(
+        public target: string='facebook', // like 'facebook'
+        public targetURL: string="", // like 'www.facebook.com'
+        public username: string='test', // this does not change
+        public email: string="",
+        public note: string="",
+        public currentPassword: string='test',
+        public startsAt: Date= new Date(),
+        public history: PasswordField[]= [],
+    ) {
     }
 }
 
 
-export interface PasswordGroup{
+export class PasswordField {
+    constructor(
+        private password: string="sushi",
+        private startsAt: Date= new Date(),
+        private endsAt: Date= new Date(), ) {
+    }
+}
+
+
+export interface PasswordGroup {
     groupName: string,  //must be unique.
     content: PasswordItem[]
 }

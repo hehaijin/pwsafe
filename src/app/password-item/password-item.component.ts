@@ -8,25 +8,11 @@ import { PasswordItem, PasswordField } from '../models/PasswordModels';
 })
 export class PasswordItemComponent implements OnInit {
   @Input() passworditem: PasswordItem;
-  passworditemExample: any = {
-    target: 'Facebook',
-    URL: 'www.facebook.com',
-    username: 'sushi',
-    password: 'sushi',
-    start: '01/10/2015',
-    note: 'nothing',
-    history: [{
-      username: 'sushi',
-      password: 'sushi2',
-      start: '01/10/2011',
-    }, {}]
-  };
-
   showHistory: boolean = false;
+  tempPassword:string;
   constructor() { }
 
   ngOnInit() {
-    console.log(this.passworditem);
   }
 
   toggleHistory() {
@@ -34,7 +20,14 @@ export class PasswordItemComponent implements OnInit {
   }
 
   save() {
-    this.passworditem.history.push(new PasswordField());
+
+    if(!this.tempPassword || this.tempPassword === this.passworditem.currentPassword){
+      console.log('no change in password');
+      return;
+    }
+    this.passworditem.history.push(new PasswordField( this.passworditem.currentPassword, this.passworditem.startsAt, new Date()));
+    this.passworditem.currentPassword= this.tempPassword;
+    console.log(this.passworditem);
   }
 
   clearHistory() {
@@ -43,5 +36,9 @@ export class PasswordItemComponent implements OnInit {
 
   deleteHistory() {
     this.passworditem.history.length = this.passworditem.history.length - 1;
+  }
+
+  updatePassword(event){
+    this.tempPassword=event;
   }
 }
