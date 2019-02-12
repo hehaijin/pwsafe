@@ -28,7 +28,15 @@ export class PasswordMangerComponent implements OnInit {
   }
 
   exportPasswords() {
-    console.log('exporting everything');
+    var myblob=new Blob([JSON.stringify(this.allPasswordData)],{type : 'application/json'});
+    const link = document.createElement('a');
+    // create a blobURI pointing to our Blob
+    link.href = URL.createObjectURL(myblob);
+    link.download = 'passwords.txt';
+    // some browser needs the anchor to be in the doc
+    document.body.append(link);
+    link.click();
+    link.remove();
   }
 
   import() {
@@ -50,6 +58,9 @@ export class PasswordMangerComponent implements OnInit {
     for (let group of Array.from(groups)) {
       let thisGroup = []
       for (let item of result) {
+        if(!item.history){
+          item.history=[];
+        }
         if (item.group === group) {
           thisGroup.push(item);
         }
