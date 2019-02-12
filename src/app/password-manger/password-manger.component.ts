@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PasswordGroup, PasswordItem } from '../models/PasswordModels';
 import { MatDialog } from '@angular/material';
 import { FileUploadComponent } from '../file-upload/file-upload.component';
+import {AddNewGroupComponent}  from "../add-new-group/add-new-group.component"
 
 @Component({
   selector: 'app-password-manger',
@@ -28,7 +29,7 @@ export class PasswordMangerComponent implements OnInit {
   }
 
   exportPasswords() {
-    var myblob=new Blob([JSON.stringify(this.allPasswordData)],{type : 'application/json'});
+    var myblob = new Blob([JSON.stringify(this.allPasswordData)], { type: 'application/json' });
     const link = document.createElement('a');
     // create a blobURI pointing to our Blob
     link.href = URL.createObjectURL(myblob);
@@ -58,8 +59,8 @@ export class PasswordMangerComponent implements OnInit {
     for (let group of Array.from(groups)) {
       let thisGroup = []
       for (let item of result) {
-        if(!item.history){
-          item.history=[];
+        if (!item.history) {
+          item.history = [];
         }
         if (item.group === group) {
           thisGroup.push(item);
@@ -71,4 +72,13 @@ export class PasswordMangerComponent implements OnInit {
     return finalGroups;
   }
 
+
+  openAddNewGroup(){
+   const diaglogref=  this.matDialog.open( AddNewGroupComponent);
+   diaglogref.afterClosed().subscribe(result => {
+    if (!result) return;
+    console.log('The dialog was closed');
+    this.allPasswordData.push({groupName: result, content:[]});
+   });
+  }
 }

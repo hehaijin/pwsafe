@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Add New Group</h2>
+<mat-dialog-content>
+  <div style="width:600px">
+    <div fxLayout='column'>
+      <mat-form-field>
+        <input type='input' matInput placeholder="Group Name" [formControl]='groupNameControl'>
+      </mat-form-field>
+    </div>
+    <div fxLayoutGap="20px">
+      <span fxFlex="grow"></span>
+      <button mat-raised-button mat-dialog-close>Cancel</button>
+      <button mat-raised-button mat-dialog-close (click)="save()">Save</button>
+    </div>
+  </div>
+</mat-dialog-content>
