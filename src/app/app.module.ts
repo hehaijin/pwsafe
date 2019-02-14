@@ -35,7 +35,7 @@ import { AddNewPasswordComponent } from './add-new-password/add-new-password.com
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { AddNewGroupComponent } from './add-new-group/add-new-group.component';
 import { StoreModule } from '@ngrx/store';
-import { passwordsReducer } from './store/reducer';
+import { passwordsReducer, groupReducer } from './store/reducer';
 
 @NgModule({
   declarations: [
@@ -75,10 +75,10 @@ import { passwordsReducer } from './store/reducer';
     FormsModule,
     FlexLayoutModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({passwords: passwordsReducer})
+    StoreModule.forRoot({ passwords: passwordsReducer, groups: groupReducer })
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents:[AddNewPasswordComponent,FileUploadComponent, AddNewGroupComponent]
+  entryComponents: [AddNewPasswordComponent, FileUploadComponent, AddNewGroupComponent]
 })
 export class AppModule { }

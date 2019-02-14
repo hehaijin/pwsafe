@@ -4,5 +4,5 @@
 {"target":"MongoDB Atlas", "targetURL":"www.facebook.com", "username":"hehaijin1981@gmail.com", 
 "currentPassword": "131231", "email":"hehaijin1981@gmail", "group":"work", "note":"interesting database" },
 {"target":"Zendesk", "targetURL":"www.zendesk.com", "username":"hhe@rhodesgroup.com", 
-"currentPassword": "xxfdfadsf4", "email":"hhe@rhodesgroup.com", "group":"work", "note":"supporting website" }
+"currentPassword": "xxfdfadsf4", "email":"hhe@rhodesgroup.com", "group":"workRemote", "note":"supporting website" }
 ]

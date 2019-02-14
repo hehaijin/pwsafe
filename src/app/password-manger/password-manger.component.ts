@@ -5,9 +5,11 @@ import { FileUploadComponent } from '../file-upload/file-upload.component';
 import { AddNewGroupComponent } from "../add-new-group/add-new-group.component"
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.state';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { map, withLatestFrom } from 'rxjs/operators';
 import { group } from '@angular/animations';
+import { AddItem, AddBatch, Group, AddGroup } from '../store/action';
+import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-password-manger',
@@ -15,47 +17,70 @@ import { group } from '@angular/animations';
   styleUrls: ['./password-manger.component.css']
 })
 export class PasswordMangerComponent implements OnInit {
-  presentableData: Observable<PasswordGroup[]>;
-  data: Observable<PasswordItem[]>;
+  presentableData: Observable<any>;
+  data: Observable<{ [key: string]: PasswordItem }>;
 
-  groups: Observable<string[]>;
+  groups: Observable<{ [key: string]: Group }>;
 
   constructor(private matDialog: MatDialog, private store: Store<AppState>) {
     this.data = store.select('passwords');
+    this.groups = store.select('groups');
   }
 
-  getGroups = (passworditems: PasswordItem[]) => {
+  currentData: PasswordItem[];
+  currentGroups: Group[];
+  getGroups = (passworditems: any[]) => {
+    let items = this.flattenEntities(passworditems);
     let set = new Set<string>();
     set.add('default');
-    for (let item of passworditems) {
+    for (let item of items) {
       if (item.group) set.add(item.group);
     }
     return Array.from(set);
   };
 
-  getPresentableData = (passworditems: PasswordItem[]) => {
-    const groups = this.getGroups(passworditems);
-    let result = [];
-    for (let group of groups) {
-      result.push({ groupName: group, content: passworditems.filter((item) => (item.group === group) || (group === 'default' && !item.group ) ) })
+
+  //entity flattening
+  flattenEntities(items: { [key: string]: any }) {
+    if (!items) return [];
+    return Object.keys(items).map(id => items[id]);
+  }
+
+  //entity building
+  buildEntities(items: any[]) {
+    let result = {};
+    for (let item of items) {
+      if (!item.id) item.id = uuid.v4();
+      result[item.id] = item;
     }
-    console.log(result);
-    return result;
-  };
+    return items;
+  }
+
 
   ngOnInit() {
+    this.presentableData = combineLatest(this.data, this.groups, (passwordItems, groups) => {
+      console.log(passwordItems);
+      console.log(groups);
+      let result = [];
+      let items = this.flattenEntities(passwordItems);
+      let grs = this.flattenEntities(groups);
+      for (let group of grs) {
+        result.push({ groupName: group.groupName, content: items.filter((item) => (item.group === group.groupName) || (group.groupName === 'default' && !item.group)) })
+      }
+      console.log(result);
+      return result;
+    });
 
-    this.groups = this.data.pipe(
-      map(this.getGroups)
-    )
+    //group auto addition
+    this.data.subscribe((pwitems: { [key: string]: PasswordItem }) => {
+      this.currentData = this.flattenEntities(pwitems);
+    })
 
-    this.presentableData = this.data.pipe(
-      map(this.getPresentableData)
-    )
+    this.groups.subscribe( grs=> { this.currentGroups= this.flattenEntities(grs)  } );
   }
 
   exportPasswords() {
-    var myblob = new Blob([JSON.stringify(this.allPasswordData)], { type: 'application/json' });
+    var myblob = new Blob([JSON.stringify(this.currentData)], { type: 'application/json' });
     const link = document.createElement('a');
     // create a blobURI pointing to our Blob
     link.href = URL.createObjectURL(myblob);
@@ -72,39 +97,25 @@ export class PasswordMangerComponent implements OnInit {
       if (!result) return;
       console.log('The dialog was closed');
       console.log(result);
-      this.allPasswordData = this.parseResult(result);
-    });
-  }
-
-  parseResult(result) {
-    let groups = new Set();
-    for (let item of result) {
-      groups.add(item.group || "default");
-    }
-    let finalGroups = [];
-    for (let group of Array.from(groups)) {
-      let thisGroup = []
-      for (let item of result) {
-        if (!item.history) {
-          item.history = [];
-        }
-        if (item.group === group) {
-          thisGroup.push(item);
+      // let r = this.parseResult(result);
+      const newgroups = this.getGroups(result);
+      for (let newgroup of newgroups) {
+        if (!this.currentGroups.some(item => item.groupName === newgroup)) {
+          this.store.dispatch(new AddGroup({ id: uuid.v4(), groupName: newgroup }));
         }
       }
-      finalGroups.push({ groupName: group, content: thisGroup });
-    }
-    console.log(finalGroups);
-    return finalGroups;
-  }
 
+
+      this.store.dispatch(new AddBatch(result));
+    });
+  }
 
   openAddNewGroup() {
     const diaglogref = this.matDialog.open(AddNewGroupComponent);
     diaglogref.afterClosed().subscribe(result => {
       if (!result) return;
       console.log('The dialog was closed');
-      this.allPasswordData.push({ groupName: result, content: [] });
+      //this.allPasswordData.push({ groupName: result, content: [] });
     });
   }
 }

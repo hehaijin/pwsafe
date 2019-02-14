@@ -1,4 +1,7 @@
+import * as uuid from 'uuid';
+
 export class PasswordItem {
+    id: string;
     public group:string;
 
     constructor(
@@ -11,6 +14,8 @@ export class PasswordItem {
         public startsAt: Date= new Date(),
         public history: PasswordField[]= [],
     ) {
+    
+        this.id=uuid.v4();
     }
 }
 
