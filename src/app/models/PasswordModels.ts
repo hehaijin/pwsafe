@@ -1,4 +1,5 @@
 export class PasswordItem {
+    public group:string;
 
     constructor(
         public target: string='facebook', // like 'facebook'

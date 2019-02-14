@@ -34,6 +34,8 @@ import { DeletePasswordDialogComponent } from './delete-password-dialog/delete-p
 import { AddNewPasswordComponent } from './add-new-password/add-new-password.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { AddNewGroupComponent } from './add-new-group/add-new-group.component';
+import { StoreModule } from '@ngrx/store';
+import { passwordsReducer } from './store/reducer';
 
 @NgModule({
   declarations: [
@@ -72,7 +74,8 @@ import { AddNewGroupComponent } from './add-new-group/add-new-group.component';
     MatDialogModule,
     FormsModule,
     FlexLayoutModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StoreModule.forRoot({passwords: passwordsReducer})
   ],
   providers: [],
   bootstrap: [AppComponent],
