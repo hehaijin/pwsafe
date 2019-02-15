@@ -12,10 +12,11 @@ export class AddNewPasswordComponent implements OnInit {
 
   @Output() add = new EventEmitter();
   newPasswordForm = new FormGroup({
-    target: new FormControl('',[Validators.required]),
+    target: new FormControl('', [Validators.required]),
     targetURL: new FormControl(),
     username: new FormControl('', [Validators.required]),
-    password: new FormControl('',[Validators.required]),
+    email: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
     note: new FormControl(),
   });
   constructor(public dialogRef: MatDialogRef<AddNewPasswordComponent>) { }
@@ -25,7 +26,9 @@ export class AddNewPasswordComponent implements OnInit {
 
   save() {
     console.warn(this.newPasswordForm.value);
-    const pw = this.newPasswordForm.value;
-    this.dialogRef.close(new PasswordItem(pw.target, pw.targetURL, pw.username, pw.password));
+    let pw = this.newPasswordForm.value;
+    pw.currentPassword = pw.password;
+    delete pw.password;
+    this.dialogRef.close(PasswordItem.parseObject(pw));
   }
 }

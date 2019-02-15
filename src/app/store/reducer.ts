@@ -1,23 +1,21 @@
 import { Injectable } from '@angular/core'
-import { Action } from '@ngrx/store';
+import { Action, ActionReducerMap } from '@ngrx/store';
 import * as uuid from 'uuid';
 
 import { PasswordItem, PasswordGroup } from "../models/PasswordModels";
 
 import * as ActionFile from './action';
+import { AppState } from './app.state';
 
 
 
 let initialstate: { [id: string]: PasswordItem } = {};
-for (let i = 0; i < 3; i++) {
-    let pwitem = new PasswordItem();
-    initialstate[pwitem.id] = pwitem;
-}
 
 export const passwordsReducer = (state: { [id: string]: PasswordItem } = initialstate, action: ActionFile.Actions): { [id: string]: PasswordItem } => {
 
     switch (action.type) {
         case ActionFile.EPasswordGroupActions.AddItem: {
+            console.log('password reducer add item activated')
             if (!action.payload.id) action.payload.id = uuid.v4();
             return { ...state, [action.payload.id]: action.payload };  // now immutable
         };
@@ -55,6 +53,7 @@ export const groupReducer = (state: { [key: string]: ActionFile.Group } = initia
 
     switch (action.type) {
         case ActionFile.EGroupActions.AddGroup: {
+            console.log('group reducer add group activated')
             return { ...state, [action.payload.id]: action.payload }
         }
         case ActionFile.EGroupActions.RemoveGroup: {
@@ -72,3 +71,10 @@ export const groupReducer = (state: { [key: string]: ActionFile.Group } = initia
     }
 
 }
+
+
+
+export const allreducers: ActionReducerMap<AppState> = {
+    passwords: passwordsReducer,
+    groups: groupReducer
+};

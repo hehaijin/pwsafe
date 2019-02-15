@@ -44,23 +44,23 @@ export type Actions = AddItem | RemoveItem | UpdateItem | AddBatch;
 
 
 export enum EGroupActions {
-    AddGroup = "[Group] add item",
+    AddGroup = "[Group] add group",    //somehow this value can not be the same with other enums. 
     RemoveGroup = "[Group] remove group",
     RenameGroup = "[Group] rename group"
 }
 
-export type Group= {id: string, groupName: string};
+export type Group = { id: string, groupName: string };
 
 export class AddGroup implements Action {
     readonly type = EGroupActions.AddGroup;
 
-    constructor(public payload:Group) { }
+    constructor(public payload: Group) { }
 }
 
 export class RemoveGroup implements Action {
     readonly type = EGroupActions.RemoveGroup;
 
-    constructor(public payload:Group) { }
+    constructor(public payload: Group) { }
 }
 
 export class RenameGroup implements Action {

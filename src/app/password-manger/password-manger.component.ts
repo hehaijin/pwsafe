@@ -6,10 +6,11 @@ import { AddNewGroupComponent } from "../add-new-group/add-new-group.component"
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.state';
 import { Observable, combineLatest } from 'rxjs';
-import { map, withLatestFrom } from 'rxjs/operators';
+import { map, withLatestFrom, startWith } from 'rxjs/operators';
 import { group } from '@angular/animations';
 import { AddItem, AddBatch, Group, AddGroup } from '../store/action';
 import * as uuid from 'uuid';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-password-manger',
@@ -18,9 +19,12 @@ import * as uuid from 'uuid';
 })
 export class PasswordMangerComponent implements OnInit {
   presentableData: Observable<any>;
+  presentableFilteredData: Observable<any>;
+  filteredData: Observable<any>;
   data: Observable<{ [key: string]: PasswordItem }>;
-
+  searching: boolean = false;
   groups: Observable<{ [key: string]: Group }>;
+  searchInput = new FormControl();
 
   constructor(private matDialog: MatDialog, private store: Store<AppState>) {
     this.data = store.select('passwords');
@@ -32,10 +36,10 @@ export class PasswordMangerComponent implements OnInit {
   getGroups = (passworditems: any[]) => {
     let items = this.flattenEntities(passworditems);
     let set = new Set<string>();
-    set.add('default');
     for (let item of items) {
       if (item.group) set.add(item.group);
     }
+
     return Array.from(set);
   };
 
@@ -59,24 +63,54 @@ export class PasswordMangerComponent implements OnInit {
 
   ngOnInit() {
     this.presentableData = combineLatest(this.data, this.groups, (passwordItems, groups) => {
+      console.log('create presentable data');
       console.log(passwordItems);
       console.log(groups);
       let result = [];
       let items = this.flattenEntities(passwordItems);
       let grs = this.flattenEntities(groups);
+      console.log(groups);
       for (let group of grs) {
-        result.push({ groupName: group.groupName, content: items.filter((item) => (item.group === group.groupName) || (group.groupName === 'default' && !item.group)) })
+        console.log(group);
+        console.log(group.groupName);
+        result.push({ groupName: group.groupName, content: items.filter((item) => item.group === group.groupName) });
+      }
+      console.log('final result')
+      console.log(result);
+      return result;
+    });
+
+
+    this.data.subscribe((pwitems: { [key: string]: PasswordItem }) => {
+      this.currentData = this.flattenEntities(pwitems);
+    })
+
+
+    this.groups.subscribe(grs => {
+      console.log('group change')
+      console.log(grs);
+      this.currentGroups = this.flattenEntities(grs) });
+
+    let searchStream = this.searchInput.valueChanges.pipe(startWith(""));
+
+    this.presentableFilteredData = combineLatest(this.data, searchStream, this.groups, (passwordItems, searchValue, groups) => {
+     // console.log('searching');
+     // console.log(passwordItems);
+     // console.log(searchValue);
+     // console.log(groups);
+      if (!searchValue) searchValue = "";
+      let result = [];
+      let items = this.flattenEntities(passwordItems).filter(item => {
+        return JSON.stringify(item).toLocaleLowerCase().includes(searchValue.toLocaleLowerCase());
+      });
+      let grs = this.flattenEntities(groups);
+      for (let group of grs) {
+        result.push({ groupName: group.groupName, content: items.filter((item) => item.group === group.groupName) });
       }
       console.log(result);
       return result;
     });
 
-    //group auto addition
-    this.data.subscribe((pwitems: { [key: string]: PasswordItem }) => {
-      this.currentData = this.flattenEntities(pwitems);
-    })
-
-    this.groups.subscribe( grs=> { this.currentGroups= this.flattenEntities(grs)  } );
   }
 
   exportPasswords() {
@@ -98,15 +132,14 @@ export class PasswordMangerComponent implements OnInit {
       console.log('The dialog was closed');
       console.log(result);
       // let r = this.parseResult(result);
+      let parsedResult = result.map(PasswordItem.parseObject);
       const newgroups = this.getGroups(result);
       for (let newgroup of newgroups) {
         if (!this.currentGroups.some(item => item.groupName === newgroup)) {
           this.store.dispatch(new AddGroup({ id: uuid.v4(), groupName: newgroup }));
         }
       }
-
-
-      this.store.dispatch(new AddBatch(result));
+      this.store.dispatch(new AddBatch(parsedResult));
     });
   }
 
@@ -115,7 +148,18 @@ export class PasswordMangerComponent implements OnInit {
     diaglogref.afterClosed().subscribe(result => {
       if (!result) return;
       console.log('The dialog was closed');
+      this.store.dispatch(new AddGroup({ id: uuid.v4(), groupName: result }))
       //this.allPasswordData.push({ groupName: result, content: [] });
     });
   }
+
+  searchClick(event) {
+    event.stopPropagation();
+    this.searching = true;
+  }
+  inputClick(event) {
+    event.stopPropagation();
+  }
+
+
 }

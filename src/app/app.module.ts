@@ -29,13 +29,12 @@ import { PasswordMangerComponent } from './password-manger/password-manger.compo
 import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PasswordFieldComponent } from './password-field/password-field.component';
-import { AddNewComponent } from './add-new/add-new.component';
 import { DeletePasswordDialogComponent } from './delete-password-dialog/delete-password-dialog.component';
 import { AddNewPasswordComponent } from './add-new-password/add-new-password.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { AddNewGroupComponent } from './add-new-group/add-new-group.component';
 import { StoreModule } from '@ngrx/store';
-import { passwordsReducer, groupReducer } from './store/reducer';
+import {allreducers, passwordsReducer, groupReducer } from './store/reducer';
 
 @NgModule({
   declarations: [
@@ -46,7 +45,6 @@ import { passwordsReducer, groupReducer } from './store/reducer';
     LoginComponent,
     PageNotFoundComponent,
     PasswordFieldComponent,
-    AddNewComponent,
     DeletePasswordDialogComponent,
     AddNewPasswordComponent,
     FileUploadComponent,
@@ -75,7 +73,7 @@ import { passwordsReducer, groupReducer } from './store/reducer';
     FormsModule,
     FlexLayoutModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({ passwords: passwordsReducer, groups: groupReducer })
+    StoreModule.forRoot(allreducers)
   ],
   providers: [],
   bootstrap: [AppComponent],
