@@ -63,20 +63,12 @@ export class PasswordMangerComponent implements OnInit {
 
   ngOnInit() {
     this.presentableData = combineLatest(this.data, this.groups, (passwordItems, groups) => {
-      console.log('create presentable data');
-      console.log(passwordItems);
-      console.log(groups);
       let result = [];
       let items = this.flattenEntities(passwordItems);
       let grs = this.flattenEntities(groups);
-      console.log(groups);
       for (let group of grs) {
-        console.log(group);
-        console.log(group.groupName);
         result.push({ groupName: group.groupName, content: items.filter((item) => item.group === group.groupName) });
       }
-      console.log('final result')
-      console.log(result);
       return result;
     });
 
@@ -87,8 +79,6 @@ export class PasswordMangerComponent implements OnInit {
 
 
     this.groups.subscribe(grs => {
-      console.log('group change')
-      console.log(grs);
       this.currentGroups = this.flattenEntities(grs) });
 
     let searchStream = this.searchInput.valueChanges.pipe(startWith(""));
@@ -107,7 +97,6 @@ export class PasswordMangerComponent implements OnInit {
       for (let group of grs) {
         result.push({ groupName: group.groupName, content: items.filter((item) => item.group === group.groupName) });
       }
-      console.log(result);
       return result;
     });
 
@@ -129,8 +118,6 @@ export class PasswordMangerComponent implements OnInit {
     const diaglogref = this.matDialog.open(FileUploadComponent);
     diaglogref.afterClosed().subscribe(result => {
       if (!result) return;
-      console.log('The dialog was closed');
-      console.log(result);
       // let r = this.parseResult(result);
       let parsedResult = result.map(PasswordItem.parseObject);
       const newgroups = this.getGroups(result);
@@ -147,7 +134,6 @@ export class PasswordMangerComponent implements OnInit {
     const diaglogref = this.matDialog.open(AddNewGroupComponent);
     diaglogref.afterClosed().subscribe(result => {
       if (!result) return;
-      console.log('The dialog was closed');
       this.store.dispatch(new AddGroup({ id: uuid.v4(), groupName: result }))
       //this.allPasswordData.push({ groupName: result, content: [] });
     });

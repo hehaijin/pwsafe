@@ -10,7 +10,7 @@ import { FormControl } from '@angular/forms';
       <mat-icon>visibility</mat-icon>
      </button>
     </mat-form-field>
-  <button *ngIf='copybutton'  style='margin-left:20px' mat-raised-button color='primary' (click)="copyToClipboard() ">
+  <button *ngIf='copybutton'  style='margin-left:20px' mat-raised-button  (click)="copyToClipboard() ">
   <mat-icon>file_copy</mat-icon>Copy
 </button>
   `,
@@ -76,8 +76,8 @@ export class PasswordFieldComponent implements OnInit {
 
     // Place in top-left corner of screen regardless of scroll position.
     textArea.style.position = 'fixed';
-    textArea.style.top = 0;
-    textArea.style.left = 0;
+    textArea.style.top = "0px";
+    textArea.style.left = "0px";
 
     // Ensure it has a small width and height. Setting to 1px / 1em
     // doesn't work as this gives a negative w/h on some browsers.

@@ -15,7 +15,6 @@ export const passwordsReducer = (state: { [id: string]: PasswordItem } = initial
 
     switch (action.type) {
         case ActionFile.EPasswordGroupActions.AddItem: {
-            console.log('password reducer add item activated')
             if (!action.payload.id) action.payload.id = uuid.v4();
             return { ...state, [action.payload.id]: action.payload };  // now immutable
         };
@@ -25,8 +24,7 @@ export const passwordsReducer = (state: { [id: string]: PasswordItem } = initial
                 if (!item.id) item.id = uuid.v4();
                 result[item.id] = item
             });  // it will override if already exists.
-            console.log('add batch');
-            console.log(result);
+      
             return result;
         }
         case ActionFile.EPasswordGroupActions.UpdateItem: {
@@ -53,7 +51,6 @@ export const groupReducer = (state: { [key: string]: ActionFile.Group } = initia
 
     switch (action.type) {
         case ActionFile.EGroupActions.AddGroup: {
-            console.log('group reducer add group activated')
             return { ...state, [action.payload.id]: action.payload }
         }
         case ActionFile.EGroupActions.RemoveGroup: {

@@ -17,7 +17,7 @@ export class FileUploadComponent implements OnInit {
 
   onFilesAdded() {
 
-    console.log('file added');
+  
     /*
     const files: { [key: string]: File } = this.file.nativeElement.files;
     for (let key in files) {
@@ -35,7 +35,6 @@ export class FileUploadComponent implements OnInit {
       reader.onload = function (e) {
         // e.target.result should contain the text
         const target:any= e.target;
-        console.log(target.result); 
         diaglogref.close(JSON.parse(target.result));
       };
       reader.readAsText(f);

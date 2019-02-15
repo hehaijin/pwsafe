@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PasswordItem, PasswordField } from '../models/PasswordModels';
-
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/app.state';
 @Component({
   selector: 'app-password-item',
   templateUrl: './password-item.component.html',
@@ -11,7 +12,7 @@ export class PasswordItemComponent implements OnInit {
   showHistory: boolean = false;
   tempPassword: string;  // the editting version of the real password
   saveButtonDiabled: boolean = true;
-  constructor() { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
     this.tempPassword = this.passworditem.currentPassword;
@@ -50,5 +51,9 @@ export class PasswordItemComponent implements OnInit {
   generateNewPassword() {
     this.tempPassword = 'thisisarandompassword';
     this.saveButtonDiabled = false;
+  }
+
+  deleteItem(){
+    
   }
 }
