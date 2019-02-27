@@ -6,6 +6,11 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PasswordItemComponent } from './password-item/password-item.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AngularFireModule} from '@angular/fire'
+import { AngularFireDatabaseModule} from '@angular/fire/database'
+import {AngularFirestoreModule} from '@angular/fire/firestore'
+import {environment} from '../environments/environment'
+
 import {
   MatListModule,
   MatButtonModule,
@@ -53,6 +58,9 @@ import {allreducers, passwordsReducer, groupReducer } from './store/reducer';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireDatabaseModule,
     AppRoutingModule,
     MatListModule,
     MatButtonModule,

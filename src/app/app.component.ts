@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AngularFireDatabase} from '@angular/fire/database'
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'pwsafe';
+
+  users;
+  constructor(db: AngularFirestore){
+ 
+    this.users= db.collection('/users').valueChanges()
+  }
+
 }
