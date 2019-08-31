@@ -11,6 +11,8 @@ import { group } from '@angular/animations';
 import { AddItem, AddBatch, Group, AddGroup } from '../store/action';
 import * as uuid from 'uuid';
 import { FormControl } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-password-manger',
@@ -26,7 +28,11 @@ export class PasswordMangerComponent implements OnInit {
   groups: Observable<{ [key: string]: Group }>;
   searchInput = new FormControl();
 
-  constructor(private matDialog: MatDialog, private store: Store<AppState>) {
+
+
+  constructor(private matDialog: MatDialog,
+    private httpClient: HttpClient,
+    private store: Store<AppState>) {
     this.data = store.select('passwords');
     this.groups = store.select('groups');
   }
@@ -60,8 +66,23 @@ export class PasswordMangerComponent implements OnInit {
     return items;
   }
 
+  loadMockPasswords() {
+    this.httpClient.get('./assets/passwords.json').subscribe((result: any[]) => {
+      if (!result) return;
+      let parsedResult = result.map(PasswordItem.parseObject);
+      const newgroups = this.getGroups(result);
+      for (let newgroup of newgroups) {
+        if (!this.currentGroups.some(item => item.groupName === newgroup)) {
+          this.store.dispatch(new AddGroup({ id: uuid.v4(), groupName: newgroup }));
+        }
+      }
+      this.store.dispatch(new AddBatch(parsedResult));
+    });
+  }
+
 
   ngOnInit() {
+    this.loadMockPasswords();
     this.presentableData = combineLatest(this.data, this.groups, (passwordItems, groups) => {
       let result = [];
       let items = this.flattenEntities(passwordItems);
@@ -79,15 +100,16 @@ export class PasswordMangerComponent implements OnInit {
 
 
     this.groups.subscribe(grs => {
-      this.currentGroups = this.flattenEntities(grs) });
+      this.currentGroups = this.flattenEntities(grs)
+    });
 
     let searchStream = this.searchInput.valueChanges.pipe(startWith(""));
 
     this.presentableFilteredData = combineLatest(this.data, searchStream, this.groups, (passwordItems, searchValue, groups) => {
-     // console.log('searching');
-     // console.log(passwordItems);
-     // console.log(searchValue);
-     // console.log(groups);
+      // console.log('searching');
+      // console.log(passwordItems);
+      // console.log(searchValue);
+      // console.log(groups);
       if (!searchValue) searchValue = "";
       let result = [];
       let items = this.flattenEntities(passwordItems).filter(item => {

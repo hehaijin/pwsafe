@@ -24,7 +24,7 @@ export const passwordsReducer = (state: { [id: string]: PasswordItem } = initial
                 if (!item.id) item.id = uuid.v4();
                 result[item.id] = item
             });  // it will override if already exists.
-      
+
             return result;
         }
         case ActionFile.EPasswordGroupActions.UpdateItem: {

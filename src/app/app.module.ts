@@ -40,6 +40,11 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
 import { AddNewGroupComponent } from './add-new-group/add-new-group.component';
 import { StoreModule } from '@ngrx/store';
 import {allreducers, passwordsReducer, groupReducer } from './store/reducer';
+import { HttpClientModule } from '@angular/common/http';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { AuthService } from './services/auth.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
 
 @NgModule({
   declarations: [
@@ -54,6 +59,7 @@ import {allreducers, passwordsReducer, groupReducer } from './store/reducer';
     AddNewPasswordComponent,
     FileUploadComponent,
     AddNewGroupComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,11 +68,13 @@ import {allreducers, passwordsReducer, groupReducer } from './store/reducer';
     AngularFirestoreModule,
     AngularFireDatabaseModule,
     AppRoutingModule,
+    NgxAuthFirebaseUIModule,
     MatListModule,
     MatButtonModule,
     MatExpansionModule,
     MatFormFieldModule,
     MatToolbarModule,
+    HttpClientModule,
     MatIconModule,
     MatInputModule,
     MatGridListModule,
@@ -83,7 +91,7 @@ import {allreducers, passwordsReducer, groupReducer } from './store/reducer';
     ReactiveFormsModule,
     StoreModule.forRoot(allreducers)
   ],
-  providers: [],
+  providers: [AuthService, AngularFireAuth],
   bootstrap: [AppComponent],
   entryComponents: [AddNewPasswordComponent, FileUploadComponent, AddNewGroupComponent]
 })

@@ -13,7 +13,7 @@ export class AppComponent {
   users;
   constructor(db: AngularFirestore){
  
-    this.users= db.collection('/users').valueChanges()
+    this.users= db.collection('/users').valueChanges();
   }
 
 }
