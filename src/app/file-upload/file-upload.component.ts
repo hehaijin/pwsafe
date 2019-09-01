@@ -6,7 +6,7 @@ import { MatDialogRef } from "@angular/material";
   styleUrls: ['./file-upload.component.css']
 })
 export class FileUploadComponent implements OnInit {
-  @ViewChild('file') file;
+  @ViewChild('file', {static: true}) file;
   constructor(public dialogRef: MatDialogRef<FileUploadComponent>) { }
   public files: Set<File> = new Set();
   ngOnInit() {

@@ -68,7 +68,7 @@ import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
     AngularFirestoreModule,
     AngularFireDatabaseModule,
     AppRoutingModule,
-    NgxAuthFirebaseUIModule,
+    //NgxAuthFirebaseUIModule,
     MatListModule,
     MatButtonModule,
     MatExpansionModule,

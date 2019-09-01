@@ -12,6 +12,9 @@ import { AddItem, AddBatch, Group, AddGroup } from '../store/action';
 import * as uuid from 'uuid';
 import { FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -28,10 +31,13 @@ export class PasswordMangerComponent implements OnInit {
   groups: Observable<{ [key: string]: Group }>;
   searchInput = new FormControl();
 
-
+  user;
 
   constructor(private matDialog: MatDialog,
     private httpClient: HttpClient,
+    private db: AngularFirestore,
+    private router: Router,
+    public afAuth: AngularFireAuth,
     private store: Store<AppState>) {
     this.data = store.select('passwords');
     this.groups = store.select('groups');
@@ -83,6 +89,7 @@ export class PasswordMangerComponent implements OnInit {
 
   ngOnInit() {
     this.loadMockPasswords();
+    this.user= this.afAuth.user;
     this.presentableData = combineLatest(this.data, this.groups, (passwordItems, groups) => {
       let result = [];
       let items = this.flattenEntities(passwordItems);
@@ -169,5 +176,8 @@ export class PasswordMangerComponent implements OnInit {
     event.stopPropagation();
   }
 
+  signout() {
+    this.afAuth.auth.signOut().then(r => this.router.navigate(['/login']));
+  }
 
 }
