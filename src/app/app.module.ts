@@ -45,6 +45,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AuthService } from './services/auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
+import { HotkeysModule } from './hotkeys/hotkeys.module';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
     MatSidenavModule,
     MatTabsModule,
     MatDialogModule,
+    HotkeysModule,
     FormsModule,
     FlexLayoutModule,
     ReactiveFormsModule,

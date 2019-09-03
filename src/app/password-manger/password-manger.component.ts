@@ -180,4 +180,8 @@ export class PasswordMangerComponent implements OnInit {
     this.afAuth.auth.signOut().then(r => this.router.navigate(['/login']));
   }
 
+  testhotkey(){
+    console.log('test hot key');
+  }
+
 }
