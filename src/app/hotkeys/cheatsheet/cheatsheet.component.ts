@@ -13,8 +13,8 @@ export class CheatsheetComponent implements OnInit {
   hotkeys = [];
 
   constructor(
-    // @Inject(MAT_DIALOG_DATA) public data,
-    //private diaglogref: MatDialogRef,
+   // @Inject(MAT_DIALOG_DATA) public data: any,
+   // private diaglogref: MatDialogRef<CheatsheetComponent>,
     private hotkeyrepo: RepoService
   ) { }
 
@@ -23,8 +23,9 @@ export class CheatsheetComponent implements OnInit {
     this.hotkeys = Array.from(this.hotkeyrepo.hotkeys)
   }
 
-  close(){
-   // this.diaglogref.close();
+  close() {
+    //this.diaglogref.close();
+    console.log('close called');
   }
 
 }

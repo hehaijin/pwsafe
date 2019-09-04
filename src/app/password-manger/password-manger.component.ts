@@ -184,4 +184,8 @@ export class PasswordMangerComponent implements OnInit {
     console.log('test hot key');
   }
 
+  testseqhotkey(){
+    console.log('testseqhotkey');
+  }
+
 }

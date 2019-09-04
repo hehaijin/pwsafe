@@ -1,15 +1,11 @@
 import { Directive, Input, OnInit, OnDestroy } from '@angular/core';
 import { RepoService } from './repo.service';
-import { element } from 'protractor';
-
 
 @Directive({
-  selector: '[hotkeys]'
+  selector: '[seqHotkeys]'
 })
-export class HotkeysDirective implements OnInit, OnDestroy {
-
-  @Input('hotkeys') hotkeys: any;
-  sub;
+export class SequencialHotkeysDirective implements OnInit, OnDestroy {
+  @Input('seqHotkeys') hotkeys: any;
   subs;
   constructor(private hotkeyrepo: RepoService) {
     this.subs = [];
@@ -22,17 +18,23 @@ export class HotkeysDirective implements OnInit, OnDestroy {
     }
     if (this.hotkeys.length === 1) {
       if (this.hotkeys[0].length !== 3) {
-        console.error('hot keys must have array as input. for exmaple ...');
+        console.error('seq hot keys must have array as input. for exmaple ...');
         return;
       }
       const el = this.hotkeys[0];
+      const keys = el[0].split('->');
+      const key1 = keys[0];
+      const key2 = keys[1];
       // console.log('hot keys 3', el[0], el[1],el[2]);
-      const sub = this.hotkeyrepo.addShortcut(el[0], el[1], el[2]);
+      const sub = this.hotkeyrepo.addSequentialShortcut(key1, key2, el[1], el[2]);
       this.subs.push(sub);
 
     } else {
       this.hotkeys.forEach(element => {
-        const sub = this.hotkeyrepo.addShortcut(element[0], element[1], element[2]);
+        const keys = element[0].split('->');
+        const key1 = keys[0];
+        const key2 = keys[1];
+        const sub = this.hotkeyrepo.addSequentialShortcut(key1, key2, element[1], element[2]);
         this.subs.push(sub);
       })
 
@@ -44,5 +46,4 @@ export class HotkeysDirective implements OnInit, OnDestroy {
       element.unsubscribe();
     });
   }
-
 }

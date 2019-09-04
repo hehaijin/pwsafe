@@ -1,6 +1,6 @@
 <h3 style='text-align: center'>Cheatsheet</h3>
 
-<table  >
+<table [hotkeys]="[['shift.?','close shift', close]]" >
 	<tbody>
 		<tr *ngFor="let keys of this.hotkeys">
 			<td>{{ keys[1] }}</td>
