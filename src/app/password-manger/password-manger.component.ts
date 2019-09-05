@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PasswordGroup, PasswordItem } from '../models/PasswordModels';
 import { MatDialog } from '@angular/material';
 import { FileUploadComponent } from '../file-upload/file-upload.component';
@@ -15,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { start } from 'repl';
 
 
 @Component({
@@ -24,13 +25,15 @@ import { Router } from '@angular/router';
 })
 export class PasswordMangerComponent implements OnInit {
   presentableData: Observable<any>;
+
   presentableFilteredData: Observable<any>;
+  presentableFilteredData2;
   filteredData: Observable<any>;
   data: Observable<{ [key: string]: PasswordItem }>;
-  searching: boolean = false;
+  searching= false;
   groups: Observable<{ [key: string]: Group }>;
   searchInput = new FormControl();
-
+  @ViewChild('searchAll', { static: true }) searchAll;
   user;
 
   constructor(private matDialog: MatDialog,
@@ -55,6 +58,16 @@ export class PasswordMangerComponent implements OnInit {
     return Array.from(set);
   };
 
+
+  handleStartSearch = (event: KeyboardEvent) => {
+    event.preventDefault();
+    this.startSearch();
+  }
+
+  startSearch() {
+    this.searchAll.nativeElement.focus();
+    this.searching= true;
+  }
 
   //entity flattening
   flattenEntities(items: { [key: string]: any }) {
@@ -89,7 +102,7 @@ export class PasswordMangerComponent implements OnInit {
 
   ngOnInit() {
     this.loadMockPasswords();
-    this.user= this.afAuth.user;
+    this.user = this.afAuth.user;
     this.presentableData = combineLatest(this.data, this.groups, (passwordItems, groups) => {
       let result = [];
       let items = this.flattenEntities(passwordItems);
@@ -102,21 +115,23 @@ export class PasswordMangerComponent implements OnInit {
 
 
     this.data.subscribe((pwitems: { [key: string]: PasswordItem }) => {
+      console.log('data change');
       this.currentData = this.flattenEntities(pwitems);
     })
 
 
     this.groups.subscribe(grs => {
+      console.log('groups change');
       this.currentGroups = this.flattenEntities(grs)
     });
 
-    let searchStream = this.searchInput.valueChanges.pipe(startWith(""));
+    let searchStream = this.searchInput.valueChanges.pipe(startWith(''));
 
-    this.presentableFilteredData = combineLatest(this.data, searchStream, this.groups, (passwordItems, searchValue, groups) => {
-      // console.log('searching');
-      // console.log(passwordItems);
-      // console.log(searchValue);
-      // console.log(groups);
+
+
+    this.presentableFilteredData = combineLatest(this.data, searchStream, this.groups.pipe(startWith([])), (passwordItems, searchValue, groups) => {
+      console.log('searching');
+      console.log('search', groups);
       if (!searchValue) searchValue = "";
       let result = [];
       let items = this.flattenEntities(passwordItems).filter(item => {
@@ -168,23 +183,25 @@ export class PasswordMangerComponent implements OnInit {
     });
   }
 
-  searchClick(event) {
-    event.stopPropagation();
-    this.searching = true;
-  }
-  inputClick(event) {
+  inputClick(event: KeyboardEvent) {
+    event.preventDefault();
     event.stopPropagation();
   }
+
 
   signout() {
     this.afAuth.auth.signOut().then(r => this.router.navigate(['/login']));
   }
 
-  testhotkey(){
+  testhotkey = () => {
+    this.test();
+  }
+
+  test() {
     console.log('test hot key');
   }
 
-  testseqhotkey(){
+  testseqhotkey() {
     console.log('testseqhotkey');
   }
 

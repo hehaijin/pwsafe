@@ -1,5 +1,8 @@
-<ngx-auth-firebaseui></ngx-auth-firebaseui>
-
+<div fxLayout="row">
+  <div fxFlex></div>
+  <ngx-auth-firebaseui style="width:650px"></ngx-auth-firebaseui>
+  <div fxFlex></div>
+</div>
 
 <div *ngIf="afAuth.user | async as user; else showLogin">
   <h1>Hello {{ user.displayName }}!</h1>
@@ -9,5 +12,3 @@
   <p>Please login.</p>
   <button (click)="login()">Login with Google</button>
 </ng-template>
-
-

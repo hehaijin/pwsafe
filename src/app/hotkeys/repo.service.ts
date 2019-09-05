@@ -3,10 +3,7 @@ import { EventManager } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material';
 import { CheatsheetComponent } from './cheatsheet/cheatsheet.component';
 
-type Option = {
-  description: string | undefined;
-  keys: string;
-}
+
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +22,7 @@ export class RepoService {
     this.addShortcut('shift.?', 'shortcut', () => this.openDiaglog());
     this.eventManager.addGlobalEventListener('window', 'keydown', (event) => {
       console.log('keydown', event.key);
-      this.prekey= this.currentkey;
+      this.prekey = this.currentkey;
       this.currentkey = event.key;
     });
   }
@@ -40,7 +37,7 @@ export class RepoService {
       unsubscribe: () => {
         // console.log('hot keys unsubscribe', event);
         dispose();
-        this.hotkeys.delete(event);
+        this.hotkeys.delete(key);
       }
     };
   }
@@ -52,7 +49,7 @@ export class RepoService {
     const dispose = this.eventManager.addGlobalEventListener('window', event, () => {
       console.log('pre key', this.prekey);
       if (this.prekey === key1) {
-       // console.log('sequencial handling', key2);
+        // console.log('sequencial handling', key2);
         handler();
       }
     });
@@ -60,7 +57,7 @@ export class RepoService {
       unsubscribe: () => {
         // console.log('hot keys unsubscribe', event);
         dispose();
-        this.hotkeys.delete(event);
+        this.hotkeys.delete(key1 + '->' + key2);
       }
     };
   }

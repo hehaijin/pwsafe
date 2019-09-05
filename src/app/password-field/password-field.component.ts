@@ -5,8 +5,8 @@ import { FormControl } from '@angular/forms';
   selector: 'app-password-field',
   template: `
   <mat-form-field>
-    <input [type]='type' matInput placeholder="Password" [formControl]="passwordController" >
-    <button mat-button matSuffix mat-icon-button (mousedown)="cansee()" (mouseup)='cannotsee()'>
+    <input [type]='type' matInput  placeholder="Password" [formControl]="passwordController" >
+    <button [hotkeys]="['p', 'copy password', handlep]"  mat-button matSuffix mat-icon-button (mousedown)="cansee()" (mouseup)='cannotsee()'>
       <mat-icon>visibility</mat-icon>
      </button>
     </mat-form-field>
@@ -40,6 +40,12 @@ export class PasswordFieldComponent implements OnInit {
 
   cannotsee() {
     this.type = 'password';
+  }
+
+
+  handlep = (event: KeyboardEvent) => {
+    console.log(event);
+    //this.copyToClipboard();
   }
 
   copyToClipboard() {
